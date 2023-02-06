@@ -6,18 +6,17 @@ using namespace std;
 unsigned char* pixels;
 vector<Triangle> triangles;
 
-vector<vector<Pixel>> image(WIDTH, vector<Pixel>(HEIGHT));
+vector<vector<Color>> image(WIDTH, vector<Color>(HEIGHT));
 void init()
 {
 	pixels = new unsigned char[WIDTH * HEIGHT * 3];
 	memset(pixels, 0, WIDTH * HEIGHT * 3);
 
-	Triangle tri(Vertex{ 200, 200, 0 }, Vertex{ 300, 200, 0 }, Vertex{ 250, 300, 0 });
-	triangles.push_back(tri);
+	triangles = ReadObjModel("model/african_head.obj", WIDTH, HEIGHT);
+	TranslateModel(triangles, Vector3{ WIDTH / 2 , HEIGHT / 2, 0.0f });
 	for (auto& triangle : triangles)
-	{
 		RasterizeTriangle(triangle, image);
-	}
+
 	ConvertTo1D(image, pixels);
 }
 
