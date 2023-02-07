@@ -12,7 +12,7 @@ void init()
 	pixels = new unsigned char[WIDTH * HEIGHT * 3];
 	memset(pixels, 0, WIDTH * HEIGHT * 3);
 
-	triangles = ReadObjModel("model/african_head.obj", WIDTH, HEIGHT);
+	triangles = ReadObjModel("model/african_head.obj", HEIGHT / 2);
 	TranslateModel(triangles, Vector3{ WIDTH / 2 , HEIGHT / 2, 0.0f });
 	for (auto& triangle : triangles)
 		RasterizeTriangle(triangle, image);

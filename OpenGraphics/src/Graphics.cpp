@@ -17,7 +17,7 @@ bool IntersectTriangle(Triangle& triangle, Vector3 point)
 	return weight1 >= 0 && weight2 >= 0 && (weight1 + weight2) <= 1;
 }
 
-Vector3 lightPos{ 500, 500, -2000 };
+Vector3 lightPos{ 1500, 1500, 2000 };
 
 void RasterizeTriangle(Triangle& triangle, Image& image)
 {
@@ -25,23 +25,21 @@ void RasterizeTriangle(Triangle& triangle, Image& image)
 	Vector3& v2 = triangle.vertices[1];
 	Vector3& v3 = triangle.vertices[2];
 
-	DrawLine(v1, v2, image, Color{ 255,255,255 });
-	DrawLine(v2, v3, image, Color{ 255,255,255 });
-	DrawLine(v1, v3, image, Color{ 255,255,255 });
+	//DrawLine(v1, v2, image, Color{ 255,255,255 });
+	//DrawLine(v2, v3, image, Color{ 255,255,255 });
+	//DrawLine(v1, v3, image, Color{ 255,255,255 });
 
-	Vector3 v1v2Dir = v2 - v1;
-	Vector3 v1v3Dir = v3 - v1;
+
+	Vector3 v1v2Dir = (v2 - v1);
+	Vector3 v1v3Dir = (v3 - v1);
 	Vector3 normal = v1v2Dir % v1v3Dir;
-	normal = normal + v1;
 	normal.Normalize();
-	Vector3 lightDir = lightPos - v1;
-	lightDir = Vector3{ 0.0f, 0.5f, 1.5f };
-	lightDir = lightDir + v1;
-	lightDir.Normalize();
-	float lightIntensity = clamp((normal ^ lightDir), 0.0f, 1.0f) * 255.0f;
 
-	DrawLine(v1, v1 + normal, image, Color{ 255,0,0 });
-	Color c = { lightIntensity, lightIntensity, lightIntensity };
+	Vector3 lightDir = lightPos - v1;
+	lightDir = Vector3{0.0f, 0.0f, -1.0f};
+	lightDir.Normalize();
+
+	unsigned char lightIntensity = (lightDir ^ normal) * 255.0f;
 
 	Vector3 bottomLeft = Vector3{ min(v1.x,min(v2.x,v3.x)) , min(v1.y,min(v2.y,v3.y)), 0 };
 	Vector3 topRight = Vector3{ max(v1.x,max(v2.x,v3.x)) , max(v1.y,max(v2.y,v3.y)), 0 };
@@ -51,7 +49,7 @@ void RasterizeTriangle(Triangle& triangle, Image& image)
 			if (i < 0 || i >= WIDTH || j < 0 || j >= HEIGHT)
 				continue;
 			else if (IntersectTriangle(triangle, Vector3{ (float)i,(float)j,0 }))
-				image[i][j] = c;
+				image[i][j] = Color{ lightIntensity,lightIntensity,lightIntensity };
 
 
 }
@@ -133,7 +131,7 @@ void checkGLError() {
 
 
 
-vector<Triangle> ReadObjModel(string file, int scalingFactorX, int scalingFactorY)
+vector<Triangle> ReadObjModel(string file, int scalingFactor)
 {
 	vector<Vector3> vertices;
 	vector<Triangle> triangles;
@@ -152,7 +150,7 @@ vector<Triangle> ReadObjModel(string file, int scalingFactorX, int scalingFactor
 		{
 			float x, y, z;
 			lineStream >> x >> y >> z;
-			vertices.push_back(Vector3{ x * (scalingFactorX / 2),y * (scalingFactorY / 2),z });
+			vertices.push_back(Vector3{ x * scalingFactor,y * scalingFactor,z * scalingFactor });
 		}
 		else if (lineType == "f")
 		{
@@ -189,4 +187,16 @@ void TranslateModel(vector<Triangle>& triangles, Vector3 vec)
 {
 	for (auto& triangle : triangles)
 		TranslateTriangle(triangle, vec);
+}
+
+
+void RotateTriangle(Triangle& tri, Vector3 angles)
+{
+
+}
+
+void RotateMode(vector<Triangle>& triangles, Vector3 angles)
+{
+
+
 }

@@ -95,7 +95,7 @@ typedef vector<vector<Color>> Image;
 
 void checkGLError();
 
-vector<Triangle> ReadObjModel(string file, int scalingFactorX, int scalingFactorY);
+vector<Triangle> ReadObjModel(string file, int scalingFactor);
 float Distance(Vector3& v1, Vector3& v2);
 
 bool IntersectTriangle(Triangle& triangle, Vector3 point);
@@ -108,3 +108,5 @@ void PrintMatrix(vector<vector<Color>>& image);
 
 void TranslateTriangle(Triangle& triangle, Vector3& vec);
 void TranslateModel(vector<Triangle>& triangles, Vector3 vec);
+
+void RotateMode(vector<Triangle>& triangles, Vector3 angles);
